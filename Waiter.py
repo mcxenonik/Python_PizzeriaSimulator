@@ -2,6 +2,7 @@ from random import randint
 
 from Person import Person
 from CustomerStates import CustomerStates
+from TaskTypes import TaskTypes
 
 
 class Waiter(Person):
@@ -24,24 +25,24 @@ class Waiter(Person):
             return
 
         task = self._taskQueue.pop(0)
-        taskId = task.getTaskType()
+        taskType = task.getTaskType()
         customerId = task.getPersonID()
 
         # print("TASK TYPE:", taskId)
         # print("CUS ID:", customerId)
 
-        if (taskId == "Karta dan"):
+        if (taskType == TaskTypes.GM):
             sim_pizzeria.getCustomersList()[customerId].setState(CustomerStates.SO)
             print("KELNER:", self._ID, "PODAJE KARTE DAN KLIENTOWI:", customerId)
 
-        elif (taskId == "Zlozono zamowienie"):
+        elif (taskType == TaskTypes.CO):
             sim_pizzeria.getCustomersList()[customerId].setState(CustomerStates.WFPO)
             waitTime = randint(1, 5)
             sim_pizzeria.getCustomersList()[customerId].setWaitTime(waitTime)
             print("KELNER:", self._ID, "ODBIERA ZAMOWIENIE OD KLIENTA:", customerId)
             print("CZAS OCZEKIWANIA:", waitTime)
 
-        elif (taskId == ""):
+        elif (taskType == ""):
             pass
 
         else:

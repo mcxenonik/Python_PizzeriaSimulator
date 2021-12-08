@@ -2,6 +2,7 @@ from random import randint
 from Person import Person
 from Task import Task
 from CustomerStates import CustomerStates
+from TaskTypes import TaskTypes
 
 
 class Customer(Person):
@@ -95,7 +96,7 @@ class Customer(Person):
                 min_tasks = waiter.getNumberOfTasks()
                 waiterID = waiter.getID()
 
-        new_task = Task(self._ID, "Karta dan")
+        new_task = Task(self._ID, TaskTypes.GM)
         sim_pizzeria.getWaitersList()[waiterID].addTask(new_task)
 
 
@@ -114,7 +115,7 @@ class Customer(Person):
                 min_tasks = waiter.getNumberOfTasks()
                 waiterID = waiter.getID()
 
-        new_task = Task(self._ID, "Zlozono zamowienie")
+        new_task = Task(self._ID, TaskTypes.CO)
         sim_pizzeria.getWaitersList()[waiterID].addTask(new_task)
 
 

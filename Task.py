@@ -1,5 +1,7 @@
 from random import randint
 
+from TaskTypes import TaskTypes
+
 
 class Task:
     def __init__(self, new_personID, new_taskType):
