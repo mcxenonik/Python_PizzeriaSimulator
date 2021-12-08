@@ -3,7 +3,8 @@ class Order:
         self._ID = new_id
         self._personID = new_personID
         self._isReady = False
-        self._productList  = new_productList
+        self._isPaid = False
+        self._productList  = new_productList  
 
 
     def getID(self):
@@ -16,6 +17,10 @@ class Order:
 
     def isReady(self):
         return self._isReady
+
+
+    def isPaid(self):
+        return self._isPaid
 
 
     def getProductList(self):

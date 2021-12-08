@@ -1,3 +1,4 @@
+from CustomerStates import CustomerStates
 from Pizzeria import Pizzeria
 from time import ctime, sleep
 
@@ -25,7 +26,7 @@ if __name__ == "__main__":
     while(run_sim):
         for customer in sim_pizzeria.getCustomersList():
             customer.doAction(sim_pizzeria)
-            if(customer.getState() == "OUT" and customer.getID() not in end_list):
+            if(customer.getState() == CustomerStates.OUT and customer.getID() not in end_list):
                 end_list.append(customer.getID())
 
         for waiter in sim_pizzeria.getWaitersList():

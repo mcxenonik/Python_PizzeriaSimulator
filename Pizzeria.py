@@ -37,7 +37,7 @@ class Pizzeria:
 
     
     def addCustomer(self):
-        new_customer = Customer(len(self._customersList), "NEW", randint(0, 3))
+        new_customer = Customer(len(self._customersList), randint(0, 3))
 
         self._customersList.append(new_customer)
 

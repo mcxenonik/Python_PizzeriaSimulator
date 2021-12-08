@@ -1,6 +1,7 @@
 from random import randint
 
 from Person import Person
+from CustomerStates import CustomerStates
 
 
 class Waiter(Person):
@@ -30,11 +31,11 @@ class Waiter(Person):
         # print("CUS ID:", customerId)
 
         if (taskId == "Karta dan"):
-            sim_pizzeria.getCustomersList()[customerId].setState("Zloz zamowienie")
+            sim_pizzeria.getCustomersList()[customerId].setState(CustomerStates.SO)
             print("KELNER:", self._ID, "PODAJE KARTE DAN KLIENTOWI:", customerId)
 
         elif (taskId == "Zlozono zamowienie"):
-            sim_pizzeria.getCustomersList()[customerId].setState("Oczekuj na przygotowanie zamówienia")
+            sim_pizzeria.getCustomersList()[customerId].setState(CustomerStates.WFPO)
             waitTime = randint(1, 5)
             sim_pizzeria.getCustomersList()[customerId].setWaitTime(waitTime)
             print("KELNER:", self._ID, "ODBIERA ZAMOWIENIE OD KLIENTA:", customerId)
