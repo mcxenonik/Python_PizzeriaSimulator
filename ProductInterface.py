@@ -13,3 +13,7 @@ class ProductInterface:
 
     def getPrice(self):
         pass
+
+
+    def getPrepareTime(self):
+        pass

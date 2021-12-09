@@ -9,11 +9,3 @@ class PersonInterface:
 
     def getName(self):
         pass
-
-
-    def getPrice(self):
-        pass
-
-
-    def getPrepareTime(self):
-        pass
