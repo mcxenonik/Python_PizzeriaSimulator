@@ -54,9 +54,7 @@ if __name__ == "__main__":
 
         if ((startTime, minutes) in come_times):
             sim_pizzeria.addCustomer()
-            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
             print("PRZYCHODZI NOWY KLIENT:", sim_pizzeria.getCustomersList()[-1].getID(), "Z GRUPY:", sim_pizzeria.getCustomersList()[-1].getGroupID())
-            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
 
         for customer in sim_pizzeria.getCustomersList():
             customer.doAction(sim_pizzeria)
