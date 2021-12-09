@@ -4,9 +4,9 @@ from time import ctime, sleep
 
 
 def setSimulationParameters():
-    numOfTables = 3
-    numOfWaiters = 2
-    numOfCustomers = 4
+    numOfTables = 4
+    numOfWaiters = 3
+    numOfCustomers = 10
 
     come_times = [(8, 4), (8, 8), (8, 12), (8, 18), (8, 30), (8, 32), (8, 34), (8, 40), (8, 46), (8, 50)]
 
@@ -48,8 +48,12 @@ if __name__ == "__main__":
     print("START:", str(startTime) + ":" + str(minutes))
 
     while(run_sim):
+        if (len(end_list) == len(sim_pizzeria.getCustomersList()) and (startTime, minutes) > come_times[0]):
+            run_sim = False
+            print("END SIMULATION")
+
         if ((startTime, minutes) in come_times):
-            sim_pizzeria._addCustomer()
+            sim_pizzeria.addCustomer()
             print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
             print("PRZYCHODZI NOWY KLIENT:", sim_pizzeria.getCustomersList()[-1].getID(), "Z GRUPY:", sim_pizzeria.getCustomersList()[-1].getGroupID())
             print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
@@ -66,10 +70,6 @@ if __name__ == "__main__":
             waiter.doTask(sim_pizzeria)
 
         sim_pizzeria.decreaseOrdersTime()
-
-        if (len(end_list) == len(sim_pizzeria.getCustomersList()) and (startTime, minutes) > come_times[0]):
-            run_sim = False
-            print("END SIMULATION")
 
         minutes += step
         hour, min, startTime, minutes = formatTime(startTime, minutes)
