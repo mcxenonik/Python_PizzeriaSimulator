@@ -5,3 +5,15 @@ class PersonInterface:
 
     def getID(self):
         pass
+
+
+    def getName(self):
+        pass
+
+
+    def getPrice(self):
+        pass
+
+
+    def getPrepareTime(self):
+        pass

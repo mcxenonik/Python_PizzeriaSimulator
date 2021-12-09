@@ -29,8 +29,12 @@ if __name__ == "__main__":
             if(customer.getState() == CustomerStates.OUT and customer.getID() not in end_list):
                 end_list.append(customer.getID())
 
+        print("--------------------------------------------")
+
         for waiter in sim_pizzeria.getWaitersList():
             waiter.doTask(sim_pizzeria)
+
+        sim_pizzeria.decreaseOrdersTime()
 
         print("============================================")
         print(ctime())

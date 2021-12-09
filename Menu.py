@@ -13,6 +13,10 @@ class Menu:
         return self._productList
 
 
+    def getProductByID(self, productID):
+        return self._productList[productID]
+
+
     def creatMenu(self, textMenu):
         for product in textMenu:
             if (product.type == "pizza"):

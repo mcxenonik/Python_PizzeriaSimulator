@@ -22,7 +22,6 @@ class Waiter(Person):
 
     def doTask(self, sim_pizzeria):
         if (len(self._taskQueue) == 0):
-            # print("KELNER:", self._ID, "OCZEKUJE NA ZADANIE")
             self.printLog(None)
             return
 
@@ -32,15 +31,12 @@ class Waiter(Person):
 
         if (taskType == TaskTypes.GM):
             sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.SO)
-            # print("KELNER:", self._ID, "PODAJE KARTE DAN KLIENTOWI:", customerId)
             self.printLog(taskType, customerId)
 
         elif (taskType == TaskTypes.CO):
             sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.WFPO)
             waitTime = randint(1, 5)
             sim_pizzeria.getCustomerByID(customerId).setWaitTime(waitTime)
-            # print("KELNER:", self._ID, "ODBIERA ZAMOWIENIE OD KLIENTA:", customerId)
-            # print("CZAS OCZEKIWANIA:", waitTime)
             self.printLog(taskType, customerId, waitTime)
 
         elif (taskType == ""):

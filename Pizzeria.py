@@ -12,7 +12,7 @@ class Pizzeria:
         self._waitersList = []
         self._customersList = []
         self._tablesList = []
-        self._orderList = []
+        self._ordersList = []
         self._menu = None
 
         self._creatMenu()
@@ -30,8 +30,8 @@ class Pizzeria:
         return self._tablesList
 
 
-    def getOrderList(self):
-        return self._orderList
+    def getOrdersList(self):
+        return self._ordersList
 
 
     def getMenu(self):
@@ -51,7 +51,7 @@ class Pizzeria:
 
 
     def getOrderByID(self, orderID):
-        return self._orderList[orderID]
+        return self._ordersList[orderID]
 
 
     def getProductByID(self, productID):
@@ -80,4 +80,10 @@ class Pizzeria:
 
 
     def addOrder(self, new_order):
-        self._orderList.append(new_order)
+        self._ordersList.append(new_order)
+
+
+    def decreaseOrdersTime(self):
+        for order in self._ordersList:
+            if (not order.isReady()):
+                order.decreaseWaitTime()
