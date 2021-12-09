@@ -98,7 +98,7 @@ class Pizzeria:
             elif (not order.isReady()):
                 order.decreaseWaitTime()
 
-            print("ORDER ID:", order.getID(), "CUS ID:", order.getCustomerID(), "WAITTIME:", order.getWaitTime())
+            print("ORDER ID:", order.getID(), "CUS ID:", order.getCustomerID(), "WAITTIME:", order.getWaitTime(), "IS READY:", order.isReady(), "IS DELIVERED:", order.isDelivered())
         print("**************************************************")
 
 
@@ -112,3 +112,11 @@ class Pizzeria:
                 waiterID = waiter.getID()
 
         return waiterID
+
+
+    # def findOrderByCustomerID(self, customerID):
+    #     for order in self._ordersList:
+    #         if (order.getCustomerID() == customerID):
+    #             return order.getID()
+
+    #     return None

@@ -27,19 +27,17 @@ class Table:
         return self._customersIDList
 
 
-    def addCustomerToTable(self, new_customer):
-        self._customersIDList.append(new_customer.getID())
+    def addCustomerToTable(self, customerID, customerGroupID):
+        self._customersIDList.append(customerID)
 
         if (self._groupID is None):
-            self._groupID = new_customer.getGroupID()
+            self._groupID = customerGroupID
 
         if (len(self._customersIDList) == self._size):
             self._isFull = True
 
 
-    def deleteCustomerFromTable(self, customer):
-        # print("CUSID:", customer.getID())
-        # print(self._customersIDList)
-        self._customersIDList.remove(customer.getID())
+    def deleteCustomerFromTable(self, customerID):
+        self._customersIDList.remove(customerID)
         self._groupID = None
         self._isFull = False

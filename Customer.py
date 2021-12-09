@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import choice
 from Person import Person
 from Task import Task
 from CustomerStates import CustomerStates
@@ -14,7 +14,6 @@ class Customer(Person):
         self._tableID = None
         self._orderID = None
         self._eatTime = 0
-        # self._waitTime = 0
 
 
     def getGroupID(self):
@@ -37,20 +36,15 @@ class Customer(Person):
         return self._eatTime
 
 
-    # def getWaitTime(self):
-    #     return self._waitTime
-
-
     def setTableID(self, new_tableID):
         self._tableID = new_tableID
 
 
+    def setOrderID(self, new_orderID):
+        self._orderID = new_orderID
+
     def setEatTime(self, new_eatTime):
         self._eatTime = new_eatTime
-
-
-    # def setWaitTime(self, new_waitTime):
-    #     self._waitTime = new_waitTime
 
 
     def addEatTime(self, eatTime_to_add):
@@ -61,10 +55,6 @@ class Customer(Person):
         self._eatTime -= 1
 
 
-    # def decreaseWaitTime(self):
-    #     self._waitTime -= 1
-
-
     def setState(self, new_state):
         self._state = new_state
 
@@ -72,13 +62,13 @@ class Customer(Person):
     def zajmij_stolik(self, sim_pizzeria):
         for table in sim_pizzeria.getTableList():
             if (table.getGroupID() == self._groupID and not table.isFull()):
-                table.addCustomerToTable(self)
+                table.addCustomerToTable(self._ID, self._groupID)
                 self._tableID = table.getID()
                 return True
 
         for table in sim_pizzeria.getTableList():
             if (table.getGroupID() == None):
-                table.addCustomerToTable(self)
+                table.addCustomerToTable(self._ID, self._groupID)
                 self._tableID = table.getID()
                 return True
 
@@ -86,15 +76,7 @@ class Customer(Person):
 
 
     def zamow_karte_dan(self, sim_pizzeria):
-        waitersList = sim_pizzeria.getWaitersList()
-
-        min_tasks = waitersList[0].getNumberOfTasks()
-        waiterID = waitersList[0].getID()
-
-        for waiter in waitersList:
-            if (waiter.getNumberOfTasks() < min_tasks):
-                min_tasks = waiter.getNumberOfTasks()
-                waiterID = waiter.getID()
+        waiterID = sim_pizzeria.findMinTaskWaiter()
 
         new_task = Task(self._ID, TaskTypes.GM)
         sim_pizzeria.getWaiterByID(waiterID).addTask(new_task)
@@ -105,21 +87,11 @@ class Customer(Person):
 
 
     def zloz_zamowienie(self, sim_pizzeria):
-        # waitersList = sim_pizzeria.getWaitersList()
-
-        # min_tasks = waitersList[0].getNumberOfTasks()
-        # waiterID = waitersList[0].getID()
-
-        # for waiter in waitersList:
-        #     if (waiter.getNumberOfTasks() < min_tasks):
-        #         min_tasks = waiter.getNumberOfTasks()
-        #         waiterID = waiter.getID()
         waiterID = sim_pizzeria.findMinTaskWaiter()
 
         productList = sim_pizzeria.getMenu().getProductList()
         orderedProductsList = [choice(productList), choice(productList)]
         self._eatTime = orderedProductsList[0].getEatingTime() + orderedProductsList[1].getEatingTime()
-        print("XXXXXXXEATTIME:", self._eatTime)
         
         new_task = Task(self._ID, TaskTypes.CO, orderedProductsList)
         sim_pizzeria.getWaiterByID(waiterID).addTask(new_task)
@@ -137,25 +109,36 @@ class Customer(Person):
         self.decreaseEatTime()
 
 
+    def popros_o_rachunek(self, sim_pizzeria):
+        waiterID = sim_pizzeria.findMinTaskWaiter()
+
+        new_task = Task(self._ID, TaskTypes.GR, self._orderID)
+        sim_pizzeria.getWaiterByID(waiterID).addTask(new_task)
+
+
     def oczekuj_na_rachunek(self):
         pass
 
 
-    def wez_rachunek(self):
-        pass
+    def wez_rachunek(self, sim_pizzeria):
+        waiterID = sim_pizzeria.findMinTaskWaiter()
+
+        new_task = Task(self._ID, TaskTypes.TR, self._orderID)
+        sim_pizzeria.getWaiterByID(waiterID).addTask(new_task)
 
 
     def oczekuj_na_pobranie_oplaty(self):
         pass
 
 
-    def oplac_rachunek(self):
-        pass
+    def oplac_rachunek(self, sim_pizzeria):
+        sim_pizzeria.getOrderByID(self._orderID).getReceipt().paidReceipt()
 
 
-    def out(self, sim_pizzeria):
-        sim_pizzeria.getTableByID(self._tableID).deleteCustomerFromTable(self)
-        self._state = CustomerStates.OUT
+    def wyjdz(self, sim_pizzeria):
+        if (self._tableID is not None):
+            sim_pizzeria.getTableByID(self._tableID).deleteCustomerFromTable(self._ID)
+            self._tableID = None
     
 
     def doAction(self, sim_pizzeria):
@@ -196,10 +179,6 @@ class Customer(Person):
         elif (self._state == CustomerStates.WFPO):
             self.oczekuj_na_przygotowanie_zamowienia()
 
-            # if (self._waitTime == 0):
-            #     self._state = CustomerStates.E
-            #     self._eatTime = randint(1, 5)
-            # else:
             self.printLog()
             self._state = CustomerStates.WFPO
 
@@ -208,10 +187,16 @@ class Customer(Person):
 
             if (self._eatTime == 0):
                 self.printLog()
-                self._state = CustomerStates.WFB
+                self._state = CustomerStates.AFB
             else:
                 self.printLog()
                 self._state = CustomerStates.E
+
+        elif (self._state == CustomerStates.AFB):
+            self.popros_o_rachunek(sim_pizzeria)
+
+            self.printLog()
+            self._state = CustomerStates.WFB
 
         elif (self._state == CustomerStates.WFB):
             self.oczekuj_na_rachunek()
@@ -219,10 +204,8 @@ class Customer(Person):
             self.printLog()
             self._state = CustomerStates.WFB
 
-            self.out(sim_pizzeria)
-
         elif (self._state == CustomerStates.TB):
-            self.wez_rachunek()
+            self.wez_rachunek(sim_pizzeria)
 
             self.printLog()
             self._state = CustomerStates.WFPB
@@ -234,13 +217,13 @@ class Customer(Person):
             self._state = CustomerStates.WFPB
 
         elif (self._state == CustomerStates.PB):
-            self.oplac_rachunek()
+            self.oplac_rachunek(sim_pizzeria)
 
             self.printLog()
             self._state = CustomerStates.OUT
 
         elif (self._state == CustomerStates.OUT):
-            # self.out(sim_pizzeria)
+            self.wyjdz(sim_pizzeria)
 
             self.printLog()
             self._state = CustomerStates.OUT
@@ -274,17 +257,20 @@ class Customer(Person):
             else:
                 print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "SKONCZYL SPOZYWANIE ZAMOWIENIA")
 
+        elif (self._state == CustomerStates.AFB):
+            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "POPROSIL O RACHUNEK")
+
         elif (self._state == CustomerStates.WFB):
             print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA RACHUNEK")
 
         elif (self._state == CustomerStates.TB):
-            pass
+            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "BIERZE RACHUNEK")
 
         elif (self._state == CustomerStates.WFPB):
-            pass
+            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA POBRANIE OPLATY")
 
         elif (self._state == CustomerStates.PB):
-            pass
+            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "PLACI RACHUNEK")
 
         elif (self._state == CustomerStates.OUT):
             print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "ODCHODZI")

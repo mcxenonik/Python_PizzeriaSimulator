@@ -1,21 +1,27 @@
 class Receipt:
-    def __init__(self, new_id, new_order):
+    def __init__(self, new_id, new_orderID, new_productList):
         self._ID = new_id
-        self._order = new_order
+        self._orderID = new_orderID
         self._isPaid = False
-        self._totalPrice = self._countPrice()
+        self._productList = new_productList
+        self._totalPrice = 0
 
+        self._countPrice()
 
     def getID(self):
         return self._ID
 
 
     def getOrderID(self):
-        return self._order.getID()
+        return self._orderID
 
 
     def isPaid(self):
         return self._isPaid
+
+
+    def paidReceipt(self):
+        self._isPaid = True
 
 
     def getTotalPrice(self):
@@ -23,7 +29,5 @@ class Receipt:
 
 
     def _countPrice(self):
-        productList = self._order.getProductList()
-
-        for product in productList:
+        for product in self._productList:
             self._totalPrice += product.getPrice()

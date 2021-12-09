@@ -1,3 +1,4 @@
+from Receipt import Receipt
 
 class Order:
     def __init__(self, new_id, new_customerID, new_waiterID, new_productList):
@@ -9,6 +10,7 @@ class Order:
         self._isPaid = False
         self._waitTime = 0
         self._productList  = new_productList
+        self._receipt = None
 
         self._setWaitTime()
 
@@ -43,6 +45,14 @@ class Order:
 
     def getWaitTime(self):
         return self._waitTime
+
+
+    def getReceipt(self):
+        return self._receipt
+
+    def createReceipt(self):
+        self._receipt = Receipt(0, self._ID, self._productList)
+        print("RACHUNEK:", self._receipt.getTotalPrice(), "DO ZAMOWIENIA:", self._ID)
 
 
     def setIsDelivered(self, isDelivered):
