@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, choice
 from Person import Person
 from Task import Task
 from CustomerStates import CustomerStates
@@ -14,7 +14,7 @@ class Customer(Person):
         self._tableID = None
         self._orderID = None
         self._eatTime = 0
-        self._waitTime = 0
+        # self._waitTime = 0
 
 
     def getGroupID(self):
@@ -37,8 +37,8 @@ class Customer(Person):
         return self._eatTime
 
 
-    def getWaitTime(self):
-        return self._waitTime
+    # def getWaitTime(self):
+    #     return self._waitTime
 
 
     def setTableID(self, new_tableID):
@@ -49,8 +49,8 @@ class Customer(Person):
         self._eatTime = new_eatTime
 
 
-    def setWaitTime(self, new_waitTime):
-        self._waitTime = new_waitTime
+    # def setWaitTime(self, new_waitTime):
+    #     self._waitTime = new_waitTime
 
 
     def addEatTime(self, eatTime_to_add):
@@ -61,8 +61,8 @@ class Customer(Person):
         self._eatTime -= 1
 
 
-    def decreaseWaitTime(self):
-        self._waitTime -= 1
+    # def decreaseWaitTime(self):
+    #     self._waitTime -= 1
 
 
     def setState(self, new_state):
@@ -105,17 +105,23 @@ class Customer(Person):
 
 
     def zloz_zamowienie(self, sim_pizzeria):
-        waitersList = sim_pizzeria.getWaitersList()
+        # waitersList = sim_pizzeria.getWaitersList()
 
-        min_tasks = waitersList[0].getNumberOfTasks()
-        waiterID = waitersList[0].getID()
+        # min_tasks = waitersList[0].getNumberOfTasks()
+        # waiterID = waitersList[0].getID()
 
-        for waiter in waitersList:
-            if (waiter.getNumberOfTasks() < min_tasks):
-                min_tasks = waiter.getNumberOfTasks()
-                waiterID = waiter.getID()
+        # for waiter in waitersList:
+        #     if (waiter.getNumberOfTasks() < min_tasks):
+        #         min_tasks = waiter.getNumberOfTasks()
+        #         waiterID = waiter.getID()
+        waiterID = sim_pizzeria.findMinTaskWaiter()
 
-        new_task = Task(self._ID, TaskTypes.CO)
+        productList = sim_pizzeria.getMenu().getProductList()
+        orderedProductsList = [choice(productList), choice(productList)]
+        self._eatTime = orderedProductsList[0].getEatingTime() + orderedProductsList[1].getEatingTime()
+        print("XXXXXXXEATTIME:", self._eatTime)
+        
+        new_task = Task(self._ID, TaskTypes.CO, orderedProductsList)
         sim_pizzeria.getWaiterByID(waiterID).addTask(new_task)
 
 
@@ -124,7 +130,7 @@ class Customer(Person):
 
 
     def oczekuj_na_przygotowanie_zamowienia(self):
-        self.decreaseWaitTime()
+        pass
 
 
     def zjedz(self):
@@ -190,17 +196,18 @@ class Customer(Person):
         elif (self._state == CustomerStates.WFPO):
             self.oczekuj_na_przygotowanie_zamowienia()
 
-            if (self._waitTime == 0):
-                self._state = CustomerStates.E
-                self._eatTime = randint(1, 5)
-            else:
-                self.printLog()
-                self._state = CustomerStates.WFPO
+            # if (self._waitTime == 0):
+            #     self._state = CustomerStates.E
+            #     self._eatTime = randint(1, 5)
+            # else:
+            self.printLog()
+            self._state = CustomerStates.WFPO
 
         elif (self._state == CustomerStates.E):
             self.zjedz()
 
             if (self._eatTime == 0):
+                self.printLog()
                 self._state = CustomerStates.WFB
             else:
                 self.printLog()
@@ -259,12 +266,13 @@ class Customer(Person):
             print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA PRZYJECIE ZAMOWIENIA")
 
         elif (self._state == CustomerStates.WFPO):
-            if (self._waitTime != 0):
-                print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA PRZYGOTOWANIE ZAMOWIENIA. POZOSTALO:", self._waitTime)
+            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA PRZYGOTOWANIE ZAMOWIENIA")
 
         elif (self._state == CustomerStates.E):
             if (self._eatTime != 0):
                 print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "SPOZYWA ZAMOWIENIE. POZOSTALO:", self._eatTime)
+            else:
+                print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "SKONCZYL SPOZYWANIE ZAMOWIENIA")
 
         elif (self._state == CustomerStates.WFB):
             print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA RACHUNEK")

@@ -3,6 +3,8 @@ from random import randint
 from Person import Person
 from CustomerStates import CustomerStates
 from TaskTypes import TaskTypes
+from Order import Order
+from Task import Task
 
 
 class Waiter(Person):
@@ -34,19 +36,26 @@ class Waiter(Person):
             self.printLog(taskType, customerId)
 
         elif (taskType == TaskTypes.CO):
+            # sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.WFPO)
+            # waitTime = randint(1, 5)
+            # sim_pizzeria.getCustomerByID(customerId).setWaitTime(waitTime)
+            # self.printLog(taskType, customerId, waitTime)
+            orderedProductsList = task.getPayload()
             sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.WFPO)
-            waitTime = randint(1, 5)
-            sim_pizzeria.getCustomerByID(customerId).setWaitTime(waitTime)
-            self.printLog(taskType, customerId, waitTime)
+            orderID = sim_pizzeria.addOrder(customerId, self._ID, orderedProductsList)
+            self.printLog(taskType, customerId, orderID)
 
-        elif (taskType == ""):
-            pass
-
+        elif (taskType == TaskTypes.DO):
+            orderID = task.getPayload()
+            
+            sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.E)
+            self.printLog(taskType, customerId, orderID)
+            
         else:
             pass
 
 
-    def printLog(self, taskType, customerId=None, waitTime=None):
+    def printLog(self, taskType, customerId=None, orderID=None):
         if (taskType == None):
             print("KELNER:", self._ID, "OCZEKUJE NA ZADANIE")
 
@@ -54,11 +63,10 @@ class Waiter(Person):
             print("KELNER:", self._ID, "PODAJE KARTE DAN KLIENTOWI:", customerId)
 
         elif (taskType == TaskTypes.CO):
-            print("KELNER:", self._ID, "ODBIERA ZAMOWIENIE OD KLIENTA:", customerId)
-            print("CZAS OCZEKIWANIA:", waitTime)
+            print("KELNER:", self._ID, "ODBIERA ZAMOWIENIE:", orderID, "OD KLIENTA:", customerId)
 
-        elif (taskType == ""):
-            pass
+        elif (taskType == TaskTypes.DO):
+            print("KELNER:", self._ID, "DOSTARCZA ZAMOWIENIE:", orderID, "DO KLIENTA:", customerId)
 
         else:
             pass

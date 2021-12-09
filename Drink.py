@@ -8,5 +8,9 @@ class Drink(Product):
         self._drinkingTime = new_drinkingTime
 
 
-    def getPrepareTime(self):
+    def __str__(self):
+        return "NAME:" + self._name
+
+
+    def getEatingTime(self):
         return self._drinkingTime

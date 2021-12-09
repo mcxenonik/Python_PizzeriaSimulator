@@ -3,6 +3,8 @@ from Customer import Customer
 from Table import Table
 from Order import Order
 from Menu import Menu
+from Task import Task
+from TaskTypes import TaskTypes
 
 from random import randint
 
@@ -79,11 +81,34 @@ class Pizzeria:
         self._tablesList.append(new_table)
 
 
-    def addOrder(self, new_order):
+    def addOrder(self, customerID, waiterID, productList):
+        new_order = Order(len(self._ordersList), customerID, waiterID, productList)
         self._ordersList.append(new_order)
+
+        return new_order.getID()
 
 
     def decreaseOrdersTime(self):
+        print("**************************************************")
         for order in self._ordersList:
-            if (not order.isReady()):
+            if (order.isReady() and not order.isDelivered()):
+                new_task = Task(order.getCustomerID(), TaskTypes.DO, order.getID())
+                self.getWaiterByID(self.findMinTaskWaiter()).addTask(new_task)
+                self.getOrderByID(order.getID()).setIsDelivered(True) 
+            elif (not order.isReady()):
                 order.decreaseWaitTime()
+
+            print("ORDER ID:", order.getID(), "CUS ID:", order.getCustomerID(), "WAITTIME:", order.getWaitTime())
+        print("**************************************************")
+
+
+    def findMinTaskWaiter(self):
+        min_tasks = self._waitersList[0].getNumberOfTasks()
+        waiterID = self._waitersList[0].getID()
+
+        for waiter in self._waitersList:
+            if (waiter.getNumberOfTasks() < min_tasks):
+                min_tasks = waiter.getNumberOfTasks()
+                waiterID = waiter.getID()
+
+        return waiterID

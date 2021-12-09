@@ -1,12 +1,13 @@
+import json
+
 from Pizza import Pizza
 from Drink import Drink
 
 class Menu:
-    def __init__(self, textMenu=None):
+    def __init__(self):
         self._productList  = []
-
-        if (textMenu is not None):
-            self.creatMenu(textMenu)
+  
+        self.creatMenu()
 
 
     def getProductList(self):
@@ -17,11 +18,18 @@ class Menu:
         return self._productList[productID]
 
 
-    def creatMenu(self, textMenu):
+    def creatMenu(self):
+        with open("products_data.json") as file:
+            textMenu = json.load(file)
+
         for product in textMenu:
-            if (product.type == "pizza"):
-                new_product = Pizza(len(self._productList), product.name, product.price, product.preapeTime, product.eatingTime)
-            elif (product.type == "drink"):
-                new_product = Drink(len(self._productList), product.name, product.price, product.drinkingTime)
+            if (textMenu[product]["type"] == "Pizza"):
+                new_product = Pizza(len(self._productList), textMenu[product]["name"], int(textMenu[product]["price"]), int(textMenu[product]["eatingTime"]), int(textMenu[product]["prepareTime"]))
+            elif (textMenu[product]["type"] == "Drink"):
+                new_product = Drink(len(self._productList), textMenu[product]["name"], int(textMenu[product]["price"]), int(textMenu[product]["drinkingTime"]))
 
             self._productList.append(new_product)
+        
+        # for product in self._productList:
+        #     print("NAME:", product.getName())
+        #     print("ET:", product.getEatingTime())
