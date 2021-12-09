@@ -22,23 +22,42 @@ class Waiter(Person):
 
     def doTask(self, sim_pizzeria):
         if (len(self._taskQueue) == 0):
+            # print("KELNER:", self._ID, "OCZEKUJE NA ZADANIE")
+            self.printLog(None)
             return
 
         task = self._taskQueue.pop(0)
         taskType = task.getTaskType()
-        customerId = task.getPersonID()
-
-        # print("TASK TYPE:", taskId)
-        # print("CUS ID:", customerId)
+        customerId = task.getCustomerID()
 
         if (taskType == TaskTypes.GM):
-            sim_pizzeria.getCustomersList()[customerId].setState(CustomerStates.SO)
+            sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.SO)
+            # print("KELNER:", self._ID, "PODAJE KARTE DAN KLIENTOWI:", customerId)
+            self.printLog(taskType, customerId)
+
+        elif (taskType == TaskTypes.CO):
+            sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.WFPO)
+            waitTime = randint(1, 5)
+            sim_pizzeria.getCustomerByID(customerId).setWaitTime(waitTime)
+            # print("KELNER:", self._ID, "ODBIERA ZAMOWIENIE OD KLIENTA:", customerId)
+            # print("CZAS OCZEKIWANIA:", waitTime)
+            self.printLog(taskType, customerId, waitTime)
+
+        elif (taskType == ""):
+            pass
+
+        else:
+            pass
+
+
+    def printLog(self, taskType, customerId=None, waitTime=None):
+        if (taskType == None):
+            print("KELNER:", self._ID, "OCZEKUJE NA ZADANIE")
+
+        elif (taskType == TaskTypes.GM):
             print("KELNER:", self._ID, "PODAJE KARTE DAN KLIENTOWI:", customerId)
 
         elif (taskType == TaskTypes.CO):
-            sim_pizzeria.getCustomersList()[customerId].setState(CustomerStates.WFPO)
-            waitTime = randint(1, 5)
-            sim_pizzeria.getCustomersList()[customerId].setWaitTime(waitTime)
             print("KELNER:", self._ID, "ODBIERA ZAMOWIENIE OD KLIENTA:", customerId)
             print("CZAS OCZEKIWANIA:", waitTime)
 

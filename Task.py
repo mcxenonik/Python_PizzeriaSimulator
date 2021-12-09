@@ -4,9 +4,9 @@ from TaskTypes import TaskTypes
 
 
 class Task:
-    def __init__(self, new_personID, new_taskType):
-        self._ID = randint(0, 1000)
-        self._personID = new_personID
+    def __init__(self, new_customerID, new_taskType):
+        self._ID = randint(0, 100000)
+        self._customerID = new_customerID
         self._taskType = new_taskType
 
 
@@ -14,8 +14,8 @@ class Task:
         return self._ID
 
 
-    def getPersonID(self):
-        return self._personID
+    def getCustomerID(self):
+        return self._customerID
 
 
     def getTaskType(self):

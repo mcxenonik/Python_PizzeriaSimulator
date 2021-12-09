@@ -2,6 +2,7 @@ from Waiter import Waiter
 from Customer import Customer
 from Table import Table
 from Order import Order
+from Menu import Menu
 
 from random import randint
 
@@ -12,6 +13,9 @@ class Pizzeria:
         self._customersList = []
         self._tablesList = []
         self._orderList = []
+        self._menu = None
+
+        self._creatMenu()
 
 
     def getWaitersList(self):
@@ -30,6 +34,33 @@ class Pizzeria:
         return self._orderList
 
 
+    def getMenu(self):
+        return self._menu
+
+
+    def getWaiterByID(self, waiterID):
+        return self._waitersList[waiterID]
+
+
+    def getCustomerByID(self, customerID):
+        return self._customersList[customerID]
+
+
+    def getTableByID(self, tableID):
+        return self._tablesList[tableID]
+
+
+    def getOrderByID(self, orderID):
+        return self._orderList[orderID]
+
+
+    def getProductByID(self, productID):
+        return self._menu[productID]
+
+    def _creatMenu(self):
+        self._menu = Menu()
+
+
     def addWaiter(self):
         new_waiter = Waiter(len(self._waitersList))
 
@@ -37,7 +68,7 @@ class Pizzeria:
 
     
     def addCustomer(self):
-        new_customer = Customer(len(self._customersList), randint(0, 3))
+        new_customer = Customer(len(self._customersList), randint(0, 4))
 
         self._customersList.append(new_customer)
 

@@ -97,7 +97,7 @@ class Customer(Person):
                 waiterID = waiter.getID()
 
         new_task = Task(self._ID, TaskTypes.GM)
-        sim_pizzeria.getWaitersList()[waiterID].addTask(new_task)
+        sim_pizzeria.getWaiterByID(waiterID).addTask(new_task)
 
 
     def oczekuj_na_karte_dan(self):
@@ -116,7 +116,7 @@ class Customer(Person):
                 waiterID = waiter.getID()
 
         new_task = Task(self._ID, TaskTypes.CO)
-        sim_pizzeria.getWaitersList()[waiterID].addTask(new_task)
+        sim_pizzeria.getWaiterByID(waiterID).addTask(new_task)
 
 
     def oczekuj_na_przyjecie_zamowienia(self):
@@ -148,7 +148,7 @@ class Customer(Person):
 
 
     def out(self, sim_pizzeria):
-        sim_pizzeria.getTableList()[self._tableID].deleteCustomerFromTable(self)
+        sim_pizzeria.getTableByID(self._tableID).deleteCustomerFromTable(self)
         self._state = CustomerStates.OUT
     
 
@@ -157,39 +157,33 @@ class Customer(Person):
             result = self.zajmij_stolik(sim_pizzeria)
 
             if (result):
-                # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "ZAJMUJE STOLIK:", self._tableID)
                 self.printLog(result)
                 self._state = CustomerStates.OM
             else:
-                # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "OCZEKUJE NA WOLNY STOLIK")
                 self.printLog(result)
                 self._state = CustomerStates.NEW
 
         elif (self._state == CustomerStates.OM):
             self.zamow_karte_dan(sim_pizzeria)
 
-            # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "ZAMOWIL KARTE DAN")
             self.printLog()
             self._state = CustomerStates.WFM
 
         elif (self._state == CustomerStates.WFM):
             self.oczekuj_na_karte_dan()
 
-            # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA KARTE DAN")
             self.printLog()
             self._state = CustomerStates.WFM
 
         elif (self._state == CustomerStates.SO):
             self.zloz_zamowienie(sim_pizzeria)
 
-            # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "SKŁADA ZAMOWIENIE")
             self.printLog()
             self._state = CustomerStates.WFAO
 
         elif (self._state == CustomerStates.WFAO):
             self.oczekuj_na_przyjecie_zamowienia()
 
-            # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA PRZYJECIE ZAMOWIENIA")
             self.printLog()
             self._state = CustomerStates.WFAO
 
@@ -200,7 +194,6 @@ class Customer(Person):
                 self._state = CustomerStates.E
                 self._eatTime = randint(1, 5)
             else:
-                # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA PRZYGOTOWANIE ZAMOWIENIA. POZOSTALO:", self._waitTime)
                 self.printLog()
                 self._state = CustomerStates.WFPO
 
@@ -210,14 +203,12 @@ class Customer(Person):
             if (self._eatTime == 0):
                 self._state = CustomerStates.WFB
             else:
-                # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "SPOZYWA ZAMOWIENIE. POZOSTALO:", self._eatTime)
                 self.printLog()
                 self._state = CustomerStates.E
 
         elif (self._state == CustomerStates.WFB):
             self.oczekuj_na_rachunek()
 
-            # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA RACHUNEK")
             self.printLog()
             self._state = CustomerStates.WFB
 
@@ -226,22 +217,24 @@ class Customer(Person):
         elif (self._state == CustomerStates.TB):
             self.wez_rachunek()
 
+            self.printLog()
             self._state = CustomerStates.WFPB
 
         elif (self._state == CustomerStates.WFPB):
             self.oczekuj_na_pobranie_oplaty()
 
+            self.printLog()
             self._state = CustomerStates.WFPB
 
         elif (self._state == CustomerStates.PB):
             self.oplac_rachunek()
 
+            self.printLog()
             self._state = CustomerStates.OUT
 
         elif (self._state == CustomerStates.OUT):
             # self.out(sim_pizzeria)
 
-            # print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "ODCHODZI")
             self.printLog()
             self._state = CustomerStates.OUT
     

@@ -2,8 +2,11 @@ from Pizza import Pizza
 from Drink import Drink
 
 class Menu:
-    def __init__(self):
+    def __init__(self, textMenu=None):
         self._productList  = []
+
+        if (textMenu is not None):
+            self.creatMenu(textMenu)
 
 
     def getProductList(self):
