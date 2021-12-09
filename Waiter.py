@@ -1,10 +1,6 @@
-from random import randint
-
 from Person import Person
 from CustomerStates import CustomerStates
 from TaskTypes import TaskTypes
-from Order import Order
-from Task import Task
 
 
 class Waiter(Person):

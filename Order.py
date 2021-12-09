@@ -56,7 +56,7 @@ class Order:
 
 
     def createReceipt(self):
-        self._receipt = Receipt(0, self._ID, self._productList)
+        self._receipt = Receipt(self._ID, self._productList)
         # print("RACHUNEK:", self._receipt.getTotalPrice(), "DO ZAMOWIENIA:", self._ID)
 
 

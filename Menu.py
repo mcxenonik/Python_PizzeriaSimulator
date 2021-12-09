@@ -7,7 +7,7 @@ class Menu:
     def __init__(self):
         self._productList  = []
   
-        self.creatMenu()
+        self._creatMenu()
 
 
     def getProductList(self):
@@ -18,7 +18,7 @@ class Menu:
         return self._productList[productID]
 
 
-    def creatMenu(self):
+    def _creatMenu(self):
         with open("products_data.json") as file:
             textMenu = json.load(file)
 
@@ -29,7 +29,3 @@ class Menu:
                 new_product = Drink(len(self._productList), textMenu[product]["name"], int(textMenu[product]["price"]), int(textMenu[product]["drinkingTime"]))
 
             self._productList.append(new_product)
-        
-        # for product in self._productList:
-        #     print("NAME:", product.getName())
-        #     print("ET:", product.getEatingTime())

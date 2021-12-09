@@ -10,14 +10,15 @@ from random import randint
 
 
 class Pizzeria:
-    def __init__(self):
+    def __init__(self, numOfTables=3, numOfWaiters=2, numOfCustomers=6):
         self._waitersList = []
         self._customersList = []
         self._tablesList = []
         self._ordersList = []
         self._menu = None
 
-        self._creatMenu()
+        # self._creatMenu()
+        self._creatPizzeria(numOfTables, numOfWaiters, numOfCustomers)
 
 
     def getWaitersList(self):
@@ -59,23 +60,33 @@ class Pizzeria:
     def getProductByID(self, productID):
         return self._menu[productID]
 
-    def _creatMenu(self):
+
+    def _creatPizzeria(self, numOfTables, numOfWaiters, numOfCustomers):
         self._menu = Menu()
 
+        for i in range(numOfTables):
+            self._addTable()
 
-    def addWaiter(self):
+        for i in range(numOfWaiters):
+            self._addWaiter()
+        
+        for i in range(numOfCustomers):
+            self._addCustomer()
+
+
+    def _addWaiter(self):
         new_waiter = Waiter(len(self._waitersList))
 
         self._waitersList.append(new_waiter)
 
     
-    def addCustomer(self):
+    def _addCustomer(self):
         new_customer = Customer(len(self._customersList), randint(0, 4))
 
         self._customersList.append(new_customer)
 
 
-    def addTable(self):
+    def _addTable(self):
         new_table = Table(len(self._tablesList), randint(1, 5))
 
         self._tablesList.append(new_table)
@@ -83,13 +94,14 @@ class Pizzeria:
 
     def addOrder(self, customerID, waiterID, productList):
         new_order = Order(len(self._ordersList), customerID, waiterID, productList)
+
         self._ordersList.append(new_order)
 
         return new_order.getID()
 
 
     def decreaseOrdersTime(self):
-        print("**************************************************")
+        print("****************************************************************************************")
         for order in self._ordersList:
             if (order.isReady() and not order.isDelivered()):
                 new_task = Task(order.getCustomerID(), TaskTypes.DO, order.getID())
@@ -99,7 +111,7 @@ class Pizzeria:
                 order.decreaseWaitTime()
 
             print("ORDER ID:", order.getID(), "CUS ID:", order.getCustomerID(), "WAITTIME:", order.getWaitTime(), "IS READY:", order.isReady(), "IS DELIVERED:", order.isDelivered())
-        print("**************************************************")
+        print("****************************************************************************************")
 
 
     def findMinTaskWaiter(self):

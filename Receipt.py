@@ -1,6 +1,6 @@
 class Receipt:
-    def __init__(self, new_id, new_orderID, new_productList):
-        self._ID = new_id
+    def __init__(self, new_orderID, new_productList):
+        self._ID = new_orderID
         self._orderID = new_orderID
         self._isPaid = False
         self._productList = new_productList
