@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
         print("============================================")
         print(ctime())
-        print(len(end_list))
+        print("WYSZLO:", len(end_list))
         print("============================================")
         sleep(2)
 
