@@ -4,9 +4,11 @@ from time import ctime, sleep
 
 
 def setSimulationParameters():
-    numOfTables = 8
+    numOfTables = 3
     numOfWaiters = 2
-    numOfCustomers = 20
+    numOfCustomers = 2
+
+    come_times = [6, 12, 18]
 
     startTime = 8
     minutes = 0
@@ -16,8 +18,9 @@ def setSimulationParameters():
     end_list = []
 
     parameters = (numOfTables, numOfWaiters, 
-                  numOfCustomers, startTime, 
-                  minutes, step, run_sim, end_list)
+                  numOfCustomers, come_times,
+                  startTime, minutes, step, 
+                  run_sim, end_list)
 
     return parameters
 
@@ -38,13 +41,17 @@ def formatTime(startTime, minutes):
 
 
 if __name__ == "__main__":
-    numOfTables, numOfWaiters, numOfCustomers, startTime, minutes, step, run_sim, end_list = setSimulationParameters()
+    numOfTables, numOfWaiters, numOfCustomers, come_times, startTime, minutes, step, run_sim, end_list = setSimulationParameters()
 
     sim_pizzeria = Pizzeria(numOfTables, numOfWaiters, numOfCustomers)
 
     print("START:", str(startTime) + ":" + str(minutes))
-    
+
     while(run_sim):
+        if (minutes in come_times):
+            sim_pizzeria._addCustomer()
+            print("PRZYCHODZI NOWY KLIENT:", sim_pizzeria.getCustomersList()[-1].getID())
+
         for customer in sim_pizzeria.getCustomersList():
             customer.doAction(sim_pizzeria)
 
@@ -58,7 +65,7 @@ if __name__ == "__main__":
 
         sim_pizzeria.decreaseOrdersTime()
 
-        if (len(end_list) == numOfCustomers):
+        if (len(end_list) == len(sim_pizzeria.getCustomersList())):
             run_sim = False
 
         minutes += step
