@@ -8,6 +8,7 @@ class Receipt:
 
         self._countPrice()
 
+
     def getID(self):
         return self._ID
 

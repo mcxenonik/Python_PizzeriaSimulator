@@ -50,9 +50,14 @@ class Order:
     def getReceipt(self):
         return self._receipt
 
+
+    def setPaid(self):
+        self._isPaid = True
+
+
     def createReceipt(self):
         self._receipt = Receipt(0, self._ID, self._productList)
-        print("RACHUNEK:", self._receipt.getTotalPrice(), "DO ZAMOWIENIA:", self._ID)
+        # print("RACHUNEK:", self._receipt.getTotalPrice(), "DO ZAMOWIENIA:", self._ID)
 
 
     def setIsDelivered(self, isDelivered):

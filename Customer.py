@@ -133,6 +133,7 @@ class Customer(Person):
 
     def oplac_rachunek(self, sim_pizzeria):
         sim_pizzeria.getOrderByID(self._orderID).getReceipt().paidReceipt()
+        sim_pizzeria.getOrderByID(self._orderID).setPaid()
 
 
     def wyjdz(self, sim_pizzeria):
@@ -207,7 +208,7 @@ class Customer(Person):
         elif (self._state == CustomerStates.TB):
             self.wez_rachunek(sim_pizzeria)
 
-            self.printLog()
+            self.printLog(False, sim_pizzeria.getOrderByID(self._orderID).getReceipt().getTotalPrice())
             self._state = CustomerStates.WFPB
 
         elif (self._state == CustomerStates.WFPB):
@@ -219,7 +220,7 @@ class Customer(Person):
         elif (self._state == CustomerStates.PB):
             self.oplac_rachunek(sim_pizzeria)
 
-            self.printLog()
+            self.printLog(False, sim_pizzeria.getOrderByID(self._orderID).getReceipt().getTotalPrice())
             self._state = CustomerStates.OUT
 
         elif (self._state == CustomerStates.OUT):
@@ -229,7 +230,7 @@ class Customer(Person):
             self._state = CustomerStates.OUT
     
 
-    def printLog(self, result=False):
+    def printLog(self, result=False, totalPrice=None):
         if (self._state == CustomerStates.NEW):
             if (result):
                 print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "ZAJMUJE STOLIK:", self._tableID)
@@ -264,13 +265,13 @@ class Customer(Person):
             print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA RACHUNEK")
 
         elif (self._state == CustomerStates.TB):
-            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "BIERZE RACHUNEK")
+            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "BIERZE RACHUNEK O WARTOSCI:", totalPrice)
 
         elif (self._state == CustomerStates.WFPB):
             print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "OCZEKUJE NA POBRANIE OPLATY")
 
         elif (self._state == CustomerStates.PB):
-            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "PLACI RACHUNEK")
+            print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "PLACI RACHUNEK O WARTOSCI:", totalPrice)
 
         elif (self._state == CustomerStates.OUT):
             print("KLIENT:", self._ID, "Z GRUPY:", self._groupID, "SIEDZACY PRZY STOLIKU:", self._tableID, "ODCHODZI")
