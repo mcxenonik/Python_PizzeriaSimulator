@@ -65,28 +65,28 @@ class Pizzeria:
         self._menu = Menu()
 
         for i in range(numOfTables):
-            self._addTable()
+            self.addTable()
 
         for i in range(numOfWaiters):
-            self._addWaiter()
+            self.addWaiter()
         
         for i in range(numOfCustomers):
-            self._addCustomer()
+            self.addCustomer()
 
 
-    def _addWaiter(self):
+    def addWaiter(self):
         new_waiter = Waiter(len(self._waitersList))
 
         self._waitersList.append(new_waiter)
 
     
-    def _addCustomer(self):
+    def addCustomer(self):
         new_customer = Customer(len(self._customersList), randint(0, 4))
 
         self._customersList.append(new_customer)
 
 
-    def _addTable(self):
+    def addTable(self):
         new_table = Table(len(self._tablesList), randint(1, 5))
 
         self._tablesList.append(new_table)
