@@ -4,9 +4,9 @@ from time import ctime, sleep
 
 
 def setSimulationParameters():
-    numOfTables = 7
-    numOfWaiters = 8
-    numOfCustomers = 50
+    numOfTables = 5
+    numOfWaiters = 4
+    numOfCustomers = 30
 
     come_times = [(8, 4), (8, 8), (8, 12), (8, 18), (8, 30), (8, 32), (8, 34), (8, 40), (8, 46), (8, 50)]
 

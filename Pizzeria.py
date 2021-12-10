@@ -17,7 +17,8 @@ class Pizzeria:
         self._ordersList = []
         self._menu = None
 
-        self._creatPizzeria(numOfTables, numOfWaiters, numOfCustomers)
+        if (self._menu is None):
+            self._creatPizzeria(numOfTables, numOfWaiters, numOfCustomers)
 
 
     def getWaitersList(self):
