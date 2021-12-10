@@ -8,6 +8,8 @@ class Waiter(Person):
         super().__init__(new_id)
 
         self._taskQueue = []
+        self._tasksDoneStat = 0
+        self._valueOfCollectedOrdersStat = 0
 
 
     def addTask(self, new_task):
@@ -18,10 +20,20 @@ class Waiter(Person):
         return len(self._taskQueue)
 
 
+    def getTasksDoneStat(self):
+        return self._tasksDoneStat
+
+
+    def getValueOfCollectedOrdersStat(self):
+        return self._valueOfCollectedOrdersStat
+
+
     def doTask(self, sim_pizzeria):
         if (len(self._taskQueue) == 0):
             self.printLog(None)
             return
+
+        self._tasksDoneStat += 1
 
         task = self._taskQueue.pop(0)
         taskType = task.getTaskType()
@@ -38,6 +50,8 @@ class Waiter(Person):
             sim_pizzeria.getCustomerByID(customerId).setState(CustomerStates.WFPO)
             orderID = sim_pizzeria.addOrder(customerId, self._ID, orderedProductsList)
             sim_pizzeria.getCustomerByID(customerId).setOrderID(orderID)
+
+            self._valueOfCollectedOrdersStat += orderedProductsList[0].getPrice() + orderedProductsList[1].getPrice()
 
             self.printLog(taskType, customerId, orderID)
 

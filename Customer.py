@@ -14,6 +14,7 @@ class Customer(Person):
         self._tableID = None
         self._orderID = None
         self._eatTime = 0
+        self._waitingTimeStat = 0
 
 
     def getGroupID(self):
@@ -34,6 +35,10 @@ class Customer(Person):
 
     def getEatTime(self):
         return self._eatTime
+
+
+    def getWaitingTimeState(self):
+        return self._waitingTimeStat
 
 
     def setTableID(self, new_tableID):
@@ -75,6 +80,10 @@ class Customer(Person):
         return False
 
 
+    def oczekuj_na_wolny_stolik(self):
+        self._waitingTimeStat += 1
+
+
     def zamow_karte_dan(self, sim_pizzeria):
         waiterID = sim_pizzeria.findMinTaskWaiter()
 
@@ -83,7 +92,7 @@ class Customer(Person):
 
 
     def oczekuj_na_karte_dan(self):
-        pass
+        self._waitingTimeStat += 1
 
 
     def zloz_zamowienie(self, sim_pizzeria):
@@ -98,11 +107,11 @@ class Customer(Person):
 
 
     def oczekuj_na_przyjecie_zamowienia(self):
-        pass
+        self._waitingTimeStat += 1
 
 
     def oczekuj_na_przygotowanie_zamowienia(self):
-        pass
+        self._waitingTimeStat += 1
 
 
     def zjedz(self):
@@ -117,7 +126,7 @@ class Customer(Person):
 
 
     def oczekuj_na_rachunek(self):
-        pass
+        self._waitingTimeStat += 1
 
 
     def wez_rachunek(self, sim_pizzeria):
@@ -128,7 +137,7 @@ class Customer(Person):
 
 
     def oczekuj_na_pobranie_oplaty(self):
-        pass
+        self._waitingTimeStat += 1
 
 
     def oplac_rachunek(self, sim_pizzeria):
@@ -150,6 +159,8 @@ class Customer(Person):
                 self.printLog(result)
                 self._state = CustomerStates.OM
             else:
+                self.oczekuj_na_wolny_stolik()
+
                 self.printLog(result)
                 self._state = CustomerStates.NEW
 

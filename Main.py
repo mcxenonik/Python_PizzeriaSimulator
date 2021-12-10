@@ -4,9 +4,9 @@ from time import ctime, sleep
 
 
 def setSimulationParameters():
-    numOfTables = 4
-    numOfWaiters = 3
-    numOfCustomers = 10
+    numOfTables = 7
+    numOfWaiters = 8
+    numOfCustomers = 50
 
     come_times = [(8, 4), (8, 8), (8, 12), (8, 18), (8, 30), (8, 32), (8, 34), (8, 40), (8, 46), (8, 50)]
 
@@ -27,7 +27,7 @@ def setSimulationParameters():
 
 def formatTime(startTime, minutes):
     if (minutes >= 60):
-        minutes = 0
+        minutes -= 60
         startTime += 1
 
     if (len(str(minutes)) == 1):
@@ -50,7 +50,6 @@ if __name__ == "__main__":
     while(run_sim):
         if (len(end_list) == len(sim_pizzeria.getCustomersList()) and (startTime, minutes) > come_times[0]):
             run_sim = False
-            print("END SIMULATION")
 
         if ((startTime, minutes) in come_times):
             sim_pizzeria.addCustomer()
@@ -73,6 +72,14 @@ if __name__ == "__main__":
         hour, min, startTime, minutes = formatTime(startTime, minutes)
         print("========================================================================================")
         print("CZAS:", hour + ":" + min)
-        print("WYSZLO:", len(end_list))
+        print("WYSZLO KLIENTOW:", len(end_list))
         print("========================================================================================")
+        if (not run_sim):
+            print("END SIMULATION")
+            print("---STATYSTYKI---")
+            print("ZAROBIONO:", sim_pizzeria.countMoney())
+            print("---")
+            sim_pizzeria.countMinMaxCustomerWaitingTime()
+            sim_pizzeria.countMinMaxWaiterTasksDone()
+            sim_pizzeria.countMinMaxWaiterValueOfCollectedOrdersStat()
         sleep(step)

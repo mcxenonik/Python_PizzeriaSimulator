@@ -17,7 +17,6 @@ class Pizzeria:
         self._ordersList = []
         self._menu = None
 
-        # self._creatMenu()
         self._creatPizzeria(numOfTables, numOfWaiters, numOfCustomers)
 
 
@@ -126,9 +125,71 @@ class Pizzeria:
         return waiterID
 
 
-    # def findOrderByCustomerID(self, customerID):
-    #     for order in self._ordersList:
-    #         if (order.getCustomerID() == customerID):
-    #             return order.getID()
+    def countMoney(self):
+        money = 0
+        for order in self._ordersList:
+            money += order.getReceipt().getTotalPrice()
 
-    #     return None
+        return money
+
+
+    def countMinMaxCustomerWaitingTime(self):
+        minTime = self._customersList[0].getWaitingTimeState()
+        minTimeID = self._customersList[0].getID()
+        maxTime = self._customersList[0].getWaitingTimeState()
+        maxTimeID = self._customersList[0].getID()
+
+        for customer in self._customersList:
+            if (customer.getWaitingTimeState() < minTime):
+                minTime = customer.getWaitingTimeState()
+                minTimeID = customer.getID()
+
+            if (customer.getWaitingTimeState() > maxTime):
+                maxTime = customer.getWaitingTimeState()
+                maxTimeID = customer.getID()
+
+        print("MINIMALNY CZAS OCZEKIWANIA:", minTime, "KLIENTA:", minTimeID)
+        print("MAKSYMALNY CZAS OCZEKIWANIA:", maxTime, "KLIENTA:", maxTimeID)
+        # return minTime, minTimeID, maxTime, maxTimeID
+
+
+    def countMinMaxWaiterTasksDone(self):
+        minTasks = self._waitersList[0].getTasksDoneStat()
+        minTasksID = self._waitersList[0].getID()
+        maxTasks = self._waitersList[0].getTasksDoneStat()
+        maxTasksID = self._waitersList[0].getID()
+
+        for waiter in self._waitersList:
+            if (waiter.getTasksDoneStat() < minTasks):
+                minTasks = waiter.getTasksDoneStat()
+                minTasksID = waiter.getID()
+
+            if (waiter.getTasksDoneStat() > maxTasks):
+                maxTasks = waiter.getTasksDoneStat()
+                maxTasksID = waiter.getID()
+
+        print("---")
+        print("MINIMALNA LICZBA WYKONANYCH ZADAN:", minTasks, "KELNERA:", minTasksID)
+        print("MAKSYMALNA LICZBA WYKONANYCH ZADAN:", maxTasks, "KELNERA:", maxTasksID)
+        print("---")
+        # return minTasks, minTasksID, maxTasks, maxTasksID
+
+
+    def countMinMaxWaiterValueOfCollectedOrdersStat(self):
+        minValue = self._waitersList[0].getValueOfCollectedOrdersStat()
+        minValueID = self._waitersList[0].getID()
+        maxValue = self._waitersList[0].getValueOfCollectedOrdersStat()
+        maxValueID = self._waitersList[0].getID()
+
+        for waiter in self._waitersList:
+            if (waiter.getValueOfCollectedOrdersStat() < minValue):
+                minValue = waiter.getValueOfCollectedOrdersStat()
+                minValueID = waiter.getID()
+
+            if (waiter.getValueOfCollectedOrdersStat() > maxValue):
+                maxValue = waiter.getValueOfCollectedOrdersStat()
+                maxValueID = waiter.getID()
+
+        print("MINIMALNA WARTOSC PRZYJETYCH ZAMOWIEN:", minValue, "KELNERA:", minValueID)
+        print("MAKSYMALNA WARTOSC PRZYJETYCH ZAMOWIEN:", maxValue, "KELNERA:", maxValueID)
+        # return minValue, minValueID, maxValue, maxValueID
